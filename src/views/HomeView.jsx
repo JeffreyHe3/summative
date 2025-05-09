@@ -1,22 +1,18 @@
-import { Link } from "react-router-dom";
 import "./HomeView.css";
+import Header from "../components/Header";
+import Footer from "../components/Footer";
+import Hero from "../components/Hero";
+import Feature from "../components/Feature";
 
-const HomeView = () => {
+function HomeView() {
     return (
-        <div className="hero">
-            <div className="overlay"></div>
-            <header>
-                <div className="buttons">
-                    <Link to={`/register`} className="button">Register</Link>
-                    <Link to={`/login`} className="button">Login</Link>
-                </div>
-            </header>
-            <div className="hero-content">
-                <h1>Unlimited movies, TV shows, and more.</h1>
-                <p>Watch anywhere. Cancel anytime.</p>
-            </div>
+        <div>
+            <Header />
+            <Hero />
+            <Feature />
+            <Footer />
         </div>
-    )
+    );
 }
 
 export default HomeView;
