@@ -1,7 +1,7 @@
 import "./style.css"
 import { useCallback, useMemo, useState } from "react"
 import { useNavigate } from "react-router-dom"
-import { useStoreContext } from "../context";
+import { useStoreContext } from "../Context";
 
 function Header() {
   const navigate = useNavigate();

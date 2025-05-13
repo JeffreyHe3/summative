@@ -16,7 +16,7 @@ function Feature() {
     return (
         <div>
             <h1 id="feature">Featured</h1>
-            <div id="movie-container">
+            <div id="movieContainer">
                 {movies && movies.map((movie) => (
                     <img key={movie.id} src={`https://image.tmdb.org/t/p/w200${movie.poster_path}`} alt={movie.title} />
                 ))}

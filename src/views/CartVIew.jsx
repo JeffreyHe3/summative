@@ -6,6 +6,10 @@ function CartView() {
     const { cart, setCart, fGenre } = useStoreContext();
     const navigate = useNavigate();
 
+    const checkout = () => {
+        setCart([]);
+    };
+
     return (
         <div id="cartBody">
             <button className="button" onClick={() => navigate(`/movies/genres/${fGenre[0]}`)}>Back</button>
@@ -21,6 +25,7 @@ function CartView() {
                     )
                 })}
             </div>
+            <button onClick={() => checkout()}>Checkout</button>
         </div>
 
     );
