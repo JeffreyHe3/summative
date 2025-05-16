@@ -1,18 +1,14 @@
-import { useStoreContext } from "../Context";
+import { useStoreContext } from "../context";
 import { useNavigate } from "react-router-dom"
 import "./CartView.css";
 
 function CartView() {
-    const { cart, setCart, fGenre } = useStoreContext();
+    const { cart, setCart } = useStoreContext();
     const navigate = useNavigate();
 
-    const checkout = () => {
-        setCart([]);
-    };
-
     return (
-        <div id="cartBody">
-            <button className="button" onClick={() => navigate(`/movies/genres/${fGenre[0]}`)}>Back</button>
+        <div id="cartPage">
+            <button className="button" onClick={() => navigate(-1)}>Back</button>
             <h1 id="cTitle">Cart</h1>
             <div className="cartContainer">
                 {cart.entrySeq().map(([key, value]) => {
@@ -25,7 +21,6 @@ function CartView() {
                     )
                 })}
             </div>
-            <button onClick={() => checkout()}>Checkout</button>
         </div>
 
     );

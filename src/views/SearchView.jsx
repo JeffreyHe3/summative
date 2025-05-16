@@ -1,7 +1,7 @@
 import axios from "axios";
 import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
-import { useStoreContext } from "../Context";
+import { useStoreContext } from "../context";
 import "./SearchView.css";
 
 function SearchView() {
@@ -13,11 +13,11 @@ function SearchView() {
     const navigate = useNavigate();
 
     useEffect(() => {
+        page.current = 1;
         async function getData() {
             const res = ((await axios.get(`https://api.themoviedb.org/3/search/movie?query=${search}&include_adult=false&language=en-US&page=1&api_key=${import.meta.env.VITE_TMDB_KEY}`)).data);
             setMovies(res.results);
             pages.current = res.total_pages;
-
         }
         getData();
     }, [search]);
@@ -39,21 +39,21 @@ function SearchView() {
 
     return (
         <div>
-            <div className="movie-container">
+            <div className="movieContainer">
                 {movies && movies.map(movie => (
-                    <div key={movie.id} >
-                        <div className="movie-card" onClick={() => navigate(`/movies/details/${movie.id}`)}>
-                            <h1>{`${movie.title}`}</h1>
-                            {movie.poster_path && <img className="movie-poster" src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`} alt={`${movie.id}`} />}
+                    <div className="movieBox" key={movie.id} >
+                        <div className="movieCard" onClick={() => navigate(`/movies/details/${movie.id}`)}>
+                            <h1 className="movieTitle">{`${movie.title}`}</h1>
+                            {movie.poster_path && <img className="moviePoster" src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`} alt={`${movie.id}`} />}
                         </div>
                         <button className="buyButtons" onClick={() => setCart((prevCart) => prevCart.set(movie.id, movie))}>{cart.has(movie.id) ? "Added" : "Buy"}</button>
                     </div>
                 ))}
             </div>
             <div className="pagination">
-                <button onClick={() => getMoreData(-1)} disabled={loading || page.current === 1}>Prev</button>
-                <p>{`Page ${page.current} of ${pages.current}`}</p>
-                <button onClick={() => getMoreData(1)} disabled={loading || page.current === pages.current}>Next</button>
+                <button className="pageButtons" onClick={() => getMoreData(-1)} disabled={loading || page.current === 1}>Prev</button>
+                <p className="movieText">{`Page ${page.current} of ${pages.current}`}</p>
+                <button className="pageButtons" onClick={() => getMoreData(1)} disabled={loading || page.current === pages.current}>Next</button>
             </div>
             {loading && <p>Loading...</p>}
         </div >

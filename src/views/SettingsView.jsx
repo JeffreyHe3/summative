@@ -3,46 +3,8 @@ import { useStoreContext } from "../context";
 import { useNavigate } from "react-router-dom"
 
 function SettingsView() {
-    const { email, lName, fName, setFName, setLName, setFGenre, fGenre } = useStoreContext();
+    const { email, lName, fName, setFName, setLName, genreList, setFGenre, fGenre } = useStoreContext();
     const navigate = useNavigate();
-    const genreList = [
-        {
-            "genre": "Action", "id": 28
-        },
-        {
-            "genre": "Adventure", "id": 12
-        },
-        {
-            "genre": "Animation", "id": 16
-        },
-        {
-            "genre": "Crime", "id": 80
-        },
-        {
-            "genre": "Family", "id": 10751
-        },
-        {
-            "genre": "Fantasy", "id": 14
-        },
-        {
-            "genre": "History", "id": 36
-        },
-        {
-            "genre": "Horror", "id": 27
-        },
-        {
-            "genre": "Mystery", "id": 9648
-        },
-        {
-            "genre": "Sci-Fi", "id": 878
-        },
-        {
-            "genre": "War", "id": 10752
-        },
-        {
-            "genre": "Western", "id": 37
-        }
-    ]
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -62,8 +24,8 @@ function SettingsView() {
     };
 
     return (
-        <div id="settingBody">
-            <button className="button" onClick={() => navigate(`/movies/genres/${fGenre[0]}`)}>Back</button>
+        <div id="settingsPage">
+            <button className="button" onClick={() => navigate(-1)}>Back</button>
             <form onSubmit={handleSubmit}>
                 <h1>Settings</h1>
                 <h1>First Name:</h1>

@@ -1,53 +1,16 @@
 import Header from "../components/Header";
 import Footer from "../components/Footer";
+import { createUserWithEmailAndPassword, signInWithPopup, GoogleAuthProvider } from 'firebase/auth';
+import { auth } from '../firebase';
 import { useNavigate } from "react-router-dom";
 import { useStoreContext } from "../context";
-import { createUserWithEmailAndPassword, signInWithPopup, GoogleAuthProvider } from 'firebase/auth';
 import "./RegisterView.css";
 
 function RegisterView() {
-    const { setEmail, setLogged, setFName, setLName, setFGenre } = useStoreContext();
+    const { setEmail, setFName, setLName, genreList, setFGenre } = useStoreContext();
     const navigate = useNavigate();
-    const genreList = [
-        {
-            "genre": "Action", "id": 28
-        },
-        {
-            "genre": "Adventure", "id": 12
-        },
-        {
-            "genre": "Animation", "id": 16
-        },
-        {
-            "genre": "Crime", "id": 80
-        },
-        {
-            "genre": "Family", "id": 10751
-        },
-        {
-            "genre": "Fantasy", "id": 14
-        },
-        {
-            "genre": "History", "id": 36
-        },
-        {
-            "genre": "Horror", "id": 27
-        },
-        {
-            "genre": "Mystery", "id": 9648
-        },
-        {
-            "genre": "Sci-Fi", "id": 878
-        },
-        {
-            "genre": "War", "id": 10752
-        },
-        {
-            "genre": "Western", "id": 37
-        }
-    ]
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
     
         const fName = e.target[0].value;
@@ -74,15 +37,30 @@ function RegisterView() {
             return;
         }
     
-        setFName(fName);
-        setLName(lName);
-        setEmail(email);
-        setLogged(true);
-        setFGenre(checkedGenres);
+        // setFName(fName);
+        // setLName(lName);
+        // setEmail(email);
+        // setFGenre(checkedGenres);
 
-        navigate(`/movies/genres/${checkedGenres[0]}`);
+        try {
+            const result = await createUserWithEmailAndPassword(auth, e.target[2].value, e.target[3].value);
+            setUser(result.user);
+            navigate(`/movies/genres/${checkedGenres[0]}`);
+        } catch (error) {
+            console.error("Error creating user:", error);
+        }
     };
-    
+
+    const googleSignIn = async () => {
+        const provider = new GoogleAuthProvider();
+        try {
+            const result = await signInWithPopup(auth, provider);
+            setUser(result.user);
+            console.log("User signed in with Google:", result.user);
+        } catch (error) {
+            console.error("Error signing in with Google:", error);
+        }
+    }
 
     return (
         <div>
@@ -109,6 +87,7 @@ function RegisterView() {
                     ))}
                     <input id="submitButton" type="submit" value="Register" />
                 </form>
+                <button onClick={googleSignIn} className="google-signin-btn">Google Sign In</button>
             </div>
             <Footer />
         </div>

@@ -1,9 +1,12 @@
-#settingBody {
+body {
     font-family: Arial;
     color: white;
-    margin-left: 20px;
     box-sizing: border-box;
     scrollbar-gutter: stable;
+}
+
+#settingsPage{
+    margin: 10px;
 }
 
 .genreLabels {
@@ -12,11 +15,11 @@
 
 .button {
     background-color: #7009e5;
+    border: none;
     color: white;
     padding: 10px 20px;
     font-size: 1rem;
     cursor: pointer;
-    margin: 10px;
     border-radius: 5px;
     transition: background-color 0.3s ease;
     font-family: "Arial";

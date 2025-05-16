@@ -2,17 +2,16 @@ import Header from "../components/Header";
 import Footer from "../components/Footer";
 import { useNavigate } from "react-router-dom";
 import { useStoreContext } from "../context";
-import { signInWithEmailAndPassword, signInWithPopup, GoogleAuthProvider } from 'firebase/auth';
 import "./LoginView.css";
 
 function LoginView() {
     const navigate = useNavigate();
-    const { setLogged } = useStoreContext();
+    const { setEmail } = useStoreContext();
 
     const handleSubmit = (e) => {
         e.preventDefault();
+        setEmail(e.target[0].value);
         navigate("/movies/genres/28");
-        setLogged(true);
     };
 
     return (
