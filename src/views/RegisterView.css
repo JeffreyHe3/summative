@@ -56,3 +56,15 @@
     color: #555;
     font-family: "Arial";
 }
+
+.google-signin-btn {
+    margin: 1rem auto;
+    display: block;
+    background-color: #FFFFFF;
+    width: 20%;
+    border-radius: 5px;
+}
+
+.google-signin-btn:hover {
+    background-color:rgb(73, 72, 72);
+}
