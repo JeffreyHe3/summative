@@ -3,19 +3,55 @@ import Footer from "../components/Footer";
 import { createUserWithEmailAndPassword, signInWithPopup, GoogleAuthProvider } from 'firebase/auth';
 import { auth } from '../firebase';
 import { useNavigate } from "react-router-dom";
-import { useStoreContext } from "../context";
+import { useStoreContext } from "../Context";
 import "./RegisterView.css";
 
 function RegisterView() {
-    const { setEmail, setFName, setLName, genreList, setFGenre } = useStoreContext();
+    const genreList = [
+        {
+            "genre": "Action", "id": 28
+        },
+        {
+            "genre": "Adventure", "id": 12
+        },
+        {
+            "genre": "Animation", "id": 16
+        },
+        {
+            "genre": "Crime", "id": 80
+        },
+        {
+            "genre": "Family", "id": 10751
+        },
+        {
+            "genre": "Fantasy", "id": 14
+        },
+        {
+            "genre": "History", "id": 36
+        },
+        {
+            "genre": "Horror", "id": 27
+        },
+        {
+            "genre": "Mystery", "id": 9648
+        },
+        {
+            "genre": "Sci-Fi", "id": 878
+        },
+        {
+            "genre": "War", "id": 10752
+        },
+        {
+            "genre": "Western", "id": 37
+        }
+    ]
+
+    const { setFGenre } = useStoreContext();
     const navigate = useNavigate();
 
     const handleSubmit = async (e) => {
         e.preventDefault();
     
-        const fName = e.target[0].value;
-        const lName = e.target[1].value;
-        const email = e.target[2].value;
         const password1 = e.target[3].value;
         const password2 = e.target[4].value;
         const checkedGenres = [];
@@ -36,10 +72,7 @@ function RegisterView() {
             alert("Please select at least 5 favorite genres.");
             return;
         }
-    
-        // setFName(fName);
-        // setLName(lName);
-        // setEmail(email);
+
         // setFGenre(checkedGenres);
 
         try {

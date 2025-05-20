@@ -1,19 +1,26 @@
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 import { useNavigate } from "react-router-dom";
-import { useStoreContext } from "../context";
+import { useStoreContext } from "../Context";
 import { signInWithEmailAndPassword, signInWithPopup, GoogleAuthProvider } from 'firebase/auth';
 import { auth } from '../firebase';
 import "./LoginView.css";
 
 function LoginView() {
+    const { setUser } = useStoreContext();
     const navigate = useNavigate();
-    const { setEmail } = useStoreContext();
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        setEmail(e.target[0].value);
-        navigate("/movies/genres/28");
+
+        try {
+            const result = await signInWithEmailAndPassword(auth, e.target[0].value, e.target[1].value);
+            setUser(result.user);
+            // replace
+            // navigate("/movies/genres/28");
+        } catch (error) {
+            console.error("Error creating user:", error);
+        }        
     };
 
     const googleSignIn = async () => {
@@ -21,7 +28,8 @@ function LoginView() {
         try {
             const result = await signInWithPopup(auth, provider);
             setUser(result.user);
-            navigate("/movies/genres/28");
+            // replace
+            // navigate("/movies/genres/28");
         } catch (error) {
             console.error("Google sign-in error:", error.message);
         }
