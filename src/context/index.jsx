@@ -6,6 +6,7 @@ import { auth } from "../firebase";
 const StoreContext = createContext();
 
 export const StoreProvider = ({ children }) => {
+    const [loading, setLoading] = useState(true);
     const [user, setUser] = useState(null);
     const [cart, setCart] = useState(Map());
     const [fGenre, setFGenre] = useState([]);
@@ -20,8 +21,13 @@ export const StoreProvider = ({ children }) => {
                 setUser(null);
                 console.log("Do not have a user");
             }
+            setLoading(false);
         });
     }, []);
+
+    if (loading) {
+        return <div>Loading...</div>;
+    }
 
     return (
         <StoreContext.Provider value={{ user, setUser, cart, setCart, fGenre, setFGenre, purHis, setPurHis }}>

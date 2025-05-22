@@ -52,8 +52,8 @@
     margin: 1rem auto;
     display: block;
     background-color: #FFFFFF;
-    width: 20%;
     border-radius: 5px;
+    cursor: pointer;
 }
 
 .google-signin-btn:hover {
