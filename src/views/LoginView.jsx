@@ -19,7 +19,7 @@ function LoginView() {
         try {
             const result = await signInWithEmailAndPassword(auth, form.email, form.password);
             setUser(result.user);
-            console.log("User signed in:");
+            navigate("/movies/genres/28");
         } catch (error) {
             console.error("Login error:", error.message);
         }
@@ -30,14 +30,14 @@ function LoginView() {
         try {
             const result = await signInWithPopup(auth, provider);
             setUser(result.user);
-            console.log("User signed in with Google:");
+            navigate("/movies/genres/28");
         } catch (error) {
             console.error("Google sign-in error:", error.message);
         }
     };
 
     return (
-        <div>
+        <>
             <Header />
             <div id="lForm">
                 <h1 id="lTitle">Login</h1>
@@ -46,13 +46,13 @@ function LoginView() {
                     <input id="password" type="password" className="input" name="password" onChange={handleChange} placeholder="Password" required />
                     <input id="loginButton" type="submit" value="Login" />
                 </form>
-                <button onClick={googleSignIn} className="google-signin-btn">
+                <button onClick={googleSignIn} className="googleSigninBtn">
                     <img className="googleIcon" src="google-logo.png"></img>
                     Log in with Google
                 </button>
             </div>
             <Footer />
-        </div>
+        </>
     )
 }
 
