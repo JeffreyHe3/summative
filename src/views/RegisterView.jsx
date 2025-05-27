@@ -7,7 +7,6 @@ import { useStoreContext } from '../Context';
 import { useNavigate } from 'react-router-dom'; import "./RegisterView.css";
 
 function RegisterView() {
-    const [form, setForm] = useState({ firstName: '', lastName: '', email: '', password: '' });
     const { setUser, setFGenre } = useStoreContext();
     const navigate = useNavigate();
     const genreList = [
@@ -49,21 +48,34 @@ function RegisterView() {
         }
     ]
 
-    const handleChange = e => setForm({ ...form, [e.target.name]: e.target.value });
+    const handleSumbit2 = (e) => {
+        const checkboxes = e.target.querySelectorAll('input[type="checkbox"]');
+        checkboxes.forEach(checkbox => {
+            if (checkbox.checked) {
+                checkedGenres.push(checkbox.id);
+            }
+        });
 
-    const handleChecked = e => {
-        if (e.target.checked) {
-
-        } else {
-
+        if (checkedGenres.length < 5) {
+            alert("Please select at least 5 favorite genres.");
+            return;
         }
     }
 
     const handleSubmit = async (e) => {
         e.preventDefault();
 
+        const password1 = e.target[3].value;
+        const password2 = e.target[4].value;
+        if (password1 !== password2) {
+            alert("Passwords do not match.");
+            return;
+        }
+
+        handleSubmit2()
+
         try {
-            const result = await createUserWithEmailAndPassword(auth, form.email, form.password);
+            const result = await createUserWithEmailAndPassword(auth, e.target[2].value, e.target[3].value);
             setUser(result.user);
         } catch (error) {
             console.error("Error creating user:", error);
@@ -92,12 +104,14 @@ function RegisterView() {
                     <input id="password" type="password" className="input" name="password" onChange={handleChange} placeholder="Password" required />
                     <input id="2Password" type="password" className="input" name="2Password" onChange={handleChange} placeholder="Re-enter Password" required />
                     <p id="genreListTitle">Choose at least 5 of your favourite genres</p>
-                    {genreList && genreList.map(genre => (
-                        <div key={genre.id}>
-                            <input id={genre.id} type="checkbox"></input>
-                            <label htmlFor={genre.id} className="inputLabel" onChange={handleChecked}> {genre.genre}</label>
-                        </div>
-                    ))}
+                    <form onSubmit={handleSumbit2}>
+                        {genreList && genreList.map(genre => (
+                            <div key={genre.id}>
+                                <input id={genre.id} type="checkbox"></input>
+                                <label htmlFor={genre.id} className="inputLabel"> {genre.genre}</label>
+                            </div>
+                        ))}
+                    </form>
                     <input id="submitButton" type="submit" value="Register" />
                 </form>
                 <button onClick={googleSignIn} className="googleSigninBtn">
