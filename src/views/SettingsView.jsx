@@ -1,10 +1,11 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useStoreContext } from "../Context";
 import "./SettingsView.css";
 
 function SettingsView() {
     const { user, setUser, fGenre, setFGenre } = useStoreContext();
     const [saved, setSaved] = useState(false);
+    const [name, setName] = useState([]);
     const genreList = [
         {
             "genre": "Action", "id": 28
@@ -44,6 +45,11 @@ function SettingsView() {
         }
     ]
 
+    useEffect(() => {
+        setName(user.displayName.split(" "));
+        console.log(name[0] + " " + name[1]);
+      }, []);
+
     const handleSubmit = (e) => {
         e.preventDefault();
 
@@ -55,7 +61,7 @@ function SettingsView() {
                 checkedGenres.push(Number(checkbox.id));
             }
         });
-        
+
         setFGenre(checkedGenres);
 
         setSaved(true);
@@ -67,9 +73,9 @@ function SettingsView() {
             <form id="settingForms" onSubmit={handleSubmit}>
                 <h1>Settings</h1>
                 <h1>First Name:</h1>
-                <input id="inputFName" className="settingsInput" type="text" defaultValue={``}></input>
+                <input id="inputFName" className="settingsInput" type="text" defaultValue={name[0]}></input>
                 <h1>Last Name:</h1>
-                <input id="inputLName" className="settingsInput" type="text" defaultValue={``}></input>
+                <input id="inputLName" className="settingsInput" type="text" defaultValue={name[1]}></input>
                 <h1>{`Email: ${user.email}`}</h1>
                 <h1>Favourite Genres:</h1>
                 {genreList && genreList.map(genre => (
