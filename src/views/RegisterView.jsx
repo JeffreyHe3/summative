@@ -8,8 +8,8 @@ import { useNavigate } from 'react-router-dom'; import "./RegisterView.css";
 
 function RegisterView() {
     const [form, setForm] = useState({ firstName: '', lastName: '', email: '', password: '', password2: '' });
-    const { setUser, fGenre } = useStoreContext();
-    const [displayName, setDisplayName] = useState("");
+    const [checkedGenres, setCheckedGenres] = useState([]);
+    const { setUser, setFGenre } = useStoreContext();
     const navigate = useNavigate();
     const genreList = [
         {
@@ -52,49 +52,59 @@ function RegisterView() {
 
     const handleChange = e => setForm({ ...form, [e.target.name]: e.target.value });
 
-    const handleChecked = e => {
+    const handleCheckboxChange = (e) => {
         if (e.target.checked) {
-            fGenre.indexOf(e.target.checked);
-            fGenre.splice(e.target.checked, 1);
+            setCheckedGenres(prev => [...prev, e.target.id]);
         } else {
-            fGenre.push(e.target.id);
+            setCheckedGenres(prev => prev.filter(id => id !== e.target.id));
         }
     };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
 
+        setFGenre(checkedGenres);
+
         if (form.password !== form.password2) {
             alert("Passwords do not match.");
             return;
         }
 
-        if (fGenre.length < 5) {
+        if (checkedGenres.length < 5) {
             alert("Please select at least 5 favorite genres.");
             return;
         }
 
-        setDisplayName(form.firstName + " " + form.lastName);
-        updateProfile(auth.currentUser, {
-            displayName: displayName
-        })
-
         try {
             const result = await createUserWithEmailAndPassword(auth, form.email, form.password);
             setUser(result.user);
-            navigate(`/movies/genres/${fGenre[0]}`);
+            updateProfile(auth.currentUser, {
+                displayName: (firstName + " " + lastName)
+            }).then(() => {
+                console.log("Profile updated!");
+            }).catch(() => {
+                console.log("An error occurred");
+            });
+            navigate(`/movies/genres/${checkedGenres[0]}`);
         } catch (error) {
             console.error("Error creating user:", error);
         }
     }
 
     const googleSignIn = async () => {
+        if (checkedGenres.length < 5) {
+            alert("Please select at least 5 favorite genres.");
+            return;
+        }
+
+        setFGenre(checkedGenres);
+
         const provider = new GoogleAuthProvider();
         try {
             const result = await signInWithPopup(auth, provider);
             setUser(result.user);
             console.log("User signed in with Google:", result.user);
-            navigate(`/movies/genres/${fGenre[0]}`);
+            navigate(`/movies/genres/${checkedGenres[0]}`);
         } catch (error) {
             console.error("Error signing in with Google:", error);
         }
@@ -114,7 +124,7 @@ function RegisterView() {
                     <p id="genreListTitle">Choose at least 5 of your favourite genres</p>
                     {genreList && genreList.map(genre => (
                         <div key={genre.id}>
-                            <input id={genre.id} type="checkbox" onChange={handleChecked}></input>
+                            <input id={genre.id} type="checkbox" name={genre.id} onChange={handleCheckboxChange}></input>
                             <label htmlFor={genre.id} className="inputLabel"> {genre.genre}</label>
                         </div>
                     ))}

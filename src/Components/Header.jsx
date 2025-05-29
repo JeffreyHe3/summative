@@ -11,12 +11,13 @@ function Header() {
   const [name, setName] = useState([]);
 
   useEffect(() => {
-    if (user.displayName != null) {
+    if (user && user.displayName) {
       setName(user.displayName.split(" "));
-      console.log(name[0] + " " + name[1]);
     }
-
-  }, []);
+    console.log(user.displayName)
+    console.log(name[0])
+    console.log(name[1])
+  }, [user]);
 
   const debounce = (func, delay) => {
     let timer;
@@ -37,7 +38,7 @@ function Header() {
   return (
     <div id="header">
       <h1 className="title">Jeffrey's Movies</h1>
-      {user ?
+      {user ? (
         <>
           <h1 className="title">{`Hi ${name[0]}!`}</h1>
           <button className="headerButtons" onClick={() => navigate("/cart")}>Cart</button>
@@ -45,11 +46,12 @@ function Header() {
           <button className="headerButtons" onClick={() => { setUser(null); signOut(auth); navigate("/"); }}>Logout</button><br />
           <input type="text" id="searchBar" placeholder="Search Movies Here" onInput={(e) => onSearch(e)} />
         </>
-        :
+      ) : (
         <>
           <button className="headerButtons" onClick={() => navigate("/login")}>Login</button>
           <button className="headerButtons" onClick={() => navigate("/register")}>Register</button>
         </>
+      )
       }
     </div>
   );

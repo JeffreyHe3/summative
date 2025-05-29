@@ -1,11 +1,13 @@
 import { useState, useEffect } from "react";
 import { useStoreContext } from "../Context";
+import { useNavigate } from "react-router-dom"
 import "./SettingsView.css";
 
 function SettingsView() {
     const { user, setUser, fGenre, setFGenre } = useStoreContext();
     const [saved, setSaved] = useState(false);
     const [name, setName] = useState([]);
+    const navigate = useNavigate();
     const genreList = [
         {
             "genre": "Action", "id": 28
@@ -47,8 +49,7 @@ function SettingsView() {
 
     useEffect(() => {
         setName(user.displayName.split(" "));
-        console.log(name[0] + " " + name[1]);
-      }, []);
+    }, [user]);
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -80,7 +81,7 @@ function SettingsView() {
                 <h1>Favourite Genres:</h1>
                 {genreList && genreList.map(genre => (
                     <div key={genre.id}>
-                        <input id={genre.id} type="checkbox" defaultChecked={fGenre.includes(genre.id)}></input>
+                        <input id={genre.id} type="checkbox" name={genre.id} defaultChecked={fGenre.includes(genre.id)}></input>
                         <label className="genreLabels" htmlFor={genre.id}>{genre.genre}</label>
                     </div>
                 ))}

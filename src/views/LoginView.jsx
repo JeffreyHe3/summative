@@ -9,7 +9,7 @@ import "./LoginView.css";
 
 function LoginView() {
     const [form, setForm] = useState({ email: '', password: '' });
-    const { setUser } = useStoreContext();
+    const { setUser, fGenre } = useStoreContext();
     const navigate = useNavigate();
 
     const handleChange = e => setForm({ ...form, [e.target.name]: e.target.value });
