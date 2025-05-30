@@ -7,6 +7,7 @@ function SettingsView() {
     const { user, setUser, fGenre, setFGenre } = useStoreContext();
     const [saved, setSaved] = useState(false);
     const [name, setName] = useState([]);
+    const [form, setForm] = useState({ firstName: '', lastName: '' });
     const navigate = useNavigate();
     const genreList = [
         {
@@ -48,8 +49,12 @@ function SettingsView() {
     ]
 
     useEffect(() => {
-        setName(user.displayName.split(" "));
+        if (user && user.displayName) {
+            setName(user.displayName.split(" "));
+        }
     }, [user]);
+
+    const handleChange = e => setForm({ ...form, [e.target.name]: e.target.value });
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -62,10 +67,16 @@ function SettingsView() {
                 checkedGenres.push(Number(checkbox.id));
             }
         });
-
-        setFGenre(checkedGenres);
-
-        setSaved(true);
+        try {
+            setUser(result.user);
+            setFGenre(checkedGenres);
+            updateProfile(auth.currentUser, {
+                displayName: form.firstName + " " + form.lastName
+            })
+            setSaved(true);
+        } catch (error) {
+            console.error("Error creating user:", error);
+        }
     };
 
     return (
@@ -74,9 +85,9 @@ function SettingsView() {
             <form id="settingForms" onSubmit={handleSubmit}>
                 <h1>Settings</h1>
                 <h1>First Name:</h1>
-                <input id="inputFName" className="settingsInput" type="text" defaultValue={name[0]}></input>
+                <input id="inputFName" name="firstName" className="settingsInput" type="text" defaultValue={name[0]} onChange={handleChange}></input>
                 <h1>Last Name:</h1>
-                <input id="inputLName" className="settingsInput" type="text" defaultValue={name[1]}></input>
+                <input id="inputLName" name="lastName" className="settingsInput" type="text" defaultValue={name[1]} onChange={handleChange}></input>
                 <h1>{`Email: ${user.email}`}</h1>
                 <h1>Favourite Genres:</h1>
                 {genreList && genreList.map(genre => (

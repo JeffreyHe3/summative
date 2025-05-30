@@ -63,8 +63,6 @@ function RegisterView() {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        setFGenre(checkedGenres);
-
         if (form.password !== form.password2) {
             alert("Passwords do not match.");
             return;
@@ -78,13 +76,10 @@ function RegisterView() {
         try {
             const result = await createUserWithEmailAndPassword(auth, form.email, form.password);
             setUser(result.user);
+            setFGenre(checkedGenres);
             updateProfile(auth.currentUser, {
-                displayName: (firstName + " " + lastName)
-            }).then(() => {
-                console.log("Profile updated!");
-            }).catch(() => {
-                console.log("An error occurred");
-            });
+                displayName: form.firstName + " " + form.lastName
+            })
             navigate(`/movies/genres/${checkedGenres[0]}`);
         } catch (error) {
             console.error("Error creating user:", error);
